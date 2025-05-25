@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 export default function QuranGPTInterface() {
   const [question, setQuestion] = useState("");
   const [answer, setAnswer] = useState(
-    "As-salamu ‘alaykum. I am QuranGPT Pro. Ask me about Quranic grammar, Tafsir, Hadith, or verse analysis. I’ll respond with classical and scholarly sources, insha’Allah."
+    "As-salamu ‘alaykum. I am an AI chatbot called QuranGPT Pro. Ask me about Quranic grammar, Tafsir, Hadith, or verse analysis. I’ll respond with classical and scholarly sources, insha’Allah."
   );
   const [loading, setLoading] = useState(false);
 
