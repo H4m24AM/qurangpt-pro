@@ -2,11 +2,14 @@
 import Image from "next/image";
 import { useState, useEffect, useRef } from "react";
 
-export default function QuranGPTInterface() {
-  const [question, setQuestion] = useState("");
-  const [answer, setAnswer] = useState(
-    "As-salamu ‘alaykum. I am QuranGPT Pro. Ask me about Quranic grammar, Tafsir, Hadith, or verse analysis. I’ll respond with classical and scholarly sources, insha’Allah."
-  );
+export default function Home() {
+  const [query, setQuery] = useState("");
+  const [messages, setMessages] = useState([
+    {
+      role: "system",
+      content: "As-salamu ‘alaykum. I am your AI Assistant QuranGPT Pro. Ask me about Quranic grammar, Tafsir, Hadith, or verse analysis."
+    }
+  ]);
   const [loading, setLoading] = useState(false);
   const [printing, setPrinting] = useState(false);
   const [animatedText, setAnimatedText] = useState("");
@@ -25,6 +28,7 @@ export default function QuranGPTInterface() {
     const newMessages = [...messages, { role: "user", content: query }].slice(-10);
     setMessages(newMessages);
     setQuery("");
+
     try {
       const res = await fetch("/api/qurangpt", {
         method: "POST",
@@ -33,6 +37,7 @@ export default function QuranGPTInterface() {
         },
         body: JSON.stringify({ prompt: query }),
       });
+
       const data = await res.json();
       const assistantReply = data.reply || "";
 
@@ -131,7 +136,7 @@ export default function QuranGPTInterface() {
               rows={1}
               onKeyDown={handleKeyDown}
               className="flex-grow px-6 py-4 text-lg bg-transparent outline-none placeholder-gray-500 text-black resize-none"
-              placeholder={messages.length > 1 ? "Enter text here..." : "Enter an ayat or sura or etc..."}
+              placeholder={messages.length > 1 ? "Enter text here..." : "1:7"}
               value={query}
               onChange={(e) => setQuery(e.target.value)}
             />
