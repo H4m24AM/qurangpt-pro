@@ -13,9 +13,7 @@ export default function QuranGPTInterface() {
   const handleAsk = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!question.trim()) return;
-
     setLoading(true);
-
     const res = await fetch("/api/qurangpt", {
       method: "POST",
       headers: {
@@ -23,27 +21,34 @@ export default function QuranGPTInterface() {
       },
       body: JSON.stringify({ prompt: question }),
     });
-
     const data = await res.json();
     setAnswer(data.reply);
     setLoading(false);
   };
 
   return (
-    <div className="min-h-screen bg-[#fdf6f0] flex flex-col items-center justify-start px-4 py-8">
-      {/* Logo and Heading */}
-      <div className="w-full max-w-2xl mx-auto space-y-8">
+    <div
+      className="min-h-screen flex flex-col items-center justify-start px-4 py-8"
+      style={{
+        backgroundImage: "url('/backgrounds/quran-fatiha.png')",
+        backgroundSize: "cover",
+        backgroundAttachment: "fixed",
+        backgroundPosition: "center",
+        backgroundRepeat: "no-repeat",
+        filter: "brightness(0.3) blur(2px)",
+      }}
+    >
+      <div className="bg-white bg-opacity-90 backdrop-blur-lg rounded-xl p-6 w-full max-w-3xl shadow-lg z-10">
         <div className="flex flex-col items-center space-y-4">
           <h1 className="text-xl font-medium text-[#014421] font-cairo">QuranGPT Pro</h1>
         </div>
 
-        {/* Input Section */}
-        <form onSubmit={handleAsk} className="space-y-4 w-full flex flex-col items-center">
+        <form onSubmit={handleAsk} className="space-y-4 w-full flex flex-col items-center mt-6">
           <textarea
             value={question}
             onChange={(e) => setQuestion(e.target.value)}
             placeholder="Ask about a verse, multiple verses, or describe a topic for Quranic analysis..."
-            className="w-[90%] md:w-[60%] p-4 text-base border border-[#014421] rounded-md focus:outline-none focus:ring-2 focus:ring-[#014421] h-36 resize-none"
+            className="w-[90%] md:w-[80%] p-4 text-base border border-[#014421] rounded-md focus:outline-none focus:ring-2 focus:ring-[#014421] h-36 resize-none bg-white bg-opacity-70"
           />
 
           <Button
@@ -54,14 +59,12 @@ export default function QuranGPTInterface() {
           </Button>
         </form>
 
-        {/* Response Section */}
-        <div className="w-full">
-          <div className="min-h-[200px] w-full p-6 border border-gray-300 rounded-md bg-gray-100">
+        <div className="w-full mt-6">
+          <div className="min-h-[200px] w-full p-6 border border-gray-300 rounded-md bg-gray-100 bg-opacity-80">
             <p className="text-base text-[#014421] leading-relaxed font-inter whitespace-pre-line">
               {answer}
             </p>
           </div>
-
           {answer && (
             <div className="flex justify-end mt-2">
               <button
@@ -74,9 +77,8 @@ export default function QuranGPTInterface() {
           )}
         </div>
 
-        {/* Footer */}
-        <footer className="mt-auto pt-8 text-center">
-          <p className="text-sm text-gray-500 text-center font-inter">
+        <footer className="mt-8 pt-4 text-center">
+          <p className="text-sm text-gray-500 font-inter">
             Powered by @QuranGPTPro | Built by P² Cyber Solutions
           </p>
           <p className="text-xs text-gray-500 mt-2">
