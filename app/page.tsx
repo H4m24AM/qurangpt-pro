@@ -2,14 +2,11 @@
 import Image from "next/image";
 import { useState, useEffect, useRef } from "react";
 
-export default function Home() {
-  const [query, setQuery] = useState("");
-  const [messages, setMessages] = useState([
-    {
-      role: "system",
-      content: "As-salamu ‘alaykum. I am you AI Assistant QuranGPT Pro. Ask me about Quranic grammar, Tafsir, Hadith, or verse analysis."
-    }
-  ]);
+export default function QuranGPTInterface() {
+  const [question, setQuestion] = useState("");
+  const [answer, setAnswer] = useState(
+    "As-salamu ‘alaykum. I am QuranGPT Pro. Ask me about Quranic grammar, Tafsir, Hadith, or verse analysis. I’ll respond with classical and scholarly sources, insha’Allah."
+  );
   const [loading, setLoading] = useState(false);
   const [printing, setPrinting] = useState(false);
   const [animatedText, setAnimatedText] = useState("");
@@ -28,7 +25,6 @@ export default function Home() {
     const newMessages = [...messages, { role: "user", content: query }].slice(-10);
     setMessages(newMessages);
     setQuery("");
-
     try {
       const res = await fetch("/api/qurangpt", {
         method: "POST",
@@ -37,7 +33,6 @@ export default function Home() {
         },
         body: JSON.stringify({ prompt: query }),
       });
-
       const data = await res.json();
       const assistantReply = data.reply || "";
 
