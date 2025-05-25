@@ -30,7 +30,7 @@ export default function QuranGPTInterface() {
   };
 
   return (
-    <div className="min-h-screen bg-[#f7f7f7] flex flex-col items-center justify-start px-4 py-8">
+	<div className="min-h-screen bg-[#fdf6f0] flex flex-col items-center justify-start px-4 py-8">
       {/* Logo and Heading */}
       <div className="w-full max-w-2xl mx-auto space-y-8">
         <div className="flex flex-col items-center space-y-4">
@@ -39,37 +39,47 @@ export default function QuranGPTInterface() {
 
         {/* Input Section */}
         <form onSubmit={handleAsk} className="space-y-4 w-full flex flex-col items-center">
-          <Input
-            type="text"
-            placeholder="Ask about a verse (e.g. 1:6) or type your Quranic question…"
-            value={question}
-            onChange={(e) => setQuestion(e.target.value)}
-            className="w-[90%] md:w-[50%] px-4 py-3 text-base border border-[#014421] rounded-md"
-          />
+          <textarea
+  value={question}
+  onChange={(e) => setQuestion(e.target.value)}
+  placeholder="Ask about a verse, multiple verses, or describe a topic for Quranic analysis..."
+  className="w-[90%] md:w-[60%] p-4 text-base border border-[#014421] rounded-md focus:outline-none focus:ring-2 focus:ring-[#014421] h-36 resize-none"
+/>
+
           <Button
             type="submit"
-            className="px-8 py-3 bg-[#c49b0e] hover:bg-[#b8860b] text-white font-medium rounded-md"
+			className="px-8 py-3 bg-[#c89f0c] hover:bg-[#b78e00] text-white font-medium rounded-md transition"
           >
             {loading ? "Thinking..." : "Ask QuranGPT Pro"}
           </Button>
         </form>
 
-        {/* Response Section */}
-        <div className="w-full">
-          <div className="min-h-[200px] w-full p-6 border border-gray-300 rounded-md bg-gray-100">
-            <p className="text-base text-[#014421] leading-relaxed font-inter whitespace-pre-line">
-              {answer}
-            </p>
-          </div>
-        </div>
+       {/* Response Section */}
+<div className="w-full">
+  <div className="min-h-[200px] w-full p-6 border border-gray-300 rounded-md bg-gray-100">
+    <p className="text-base text-[#014421] leading-relaxed font-inter whitespace-pre-line">
+      {answer}
+    </p>
+  </div>
 
-        {/* Footer */}
-        <footer className="mt-auto pt-8 text-center">
-          <p className="text-sm text-gray-500 text-center font-inter">
-            Powered by @QuranGPTPro | Commissioned & Built by P² Cyber Solutions
-          </p>
-        </footer>
-      </div>
+  {answer && (
+    <div className="flex justify-end mt-2">
+      <button
+        onClick={() => navigator.clipboard.writeText(answer)}
+        className="px-4 py-2 bg-[#014421] text-white rounded-md text-sm hover:bg-green-900 transition"
+      >
+        Copy Response
+      </button>
     </div>
-  );
-}
+  )}
+</div>
+
+{/* Footer */}
+<footer className="mt-auto pt-8 text-center">
+  <p className="text-sm text-gray-500 text-center font-inter">
+    Powered by @QuranGPTPro | Built by P² Cyber Solutions
+  </p>
+  <p className="text-xs text-gray-500 mt-2">
+    Suggestions? Email: <a href="mailto:info@p2-cyber.com" className="underline text-blue-600">info@p2-cyber.com</a>
+  </p>
+</footer>
