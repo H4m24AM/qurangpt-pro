@@ -7,7 +7,7 @@ export default function Home() {
   const [messages, setMessages] = useState([
     {
       role: "system",
-      content: "Assalamu alaykum. I am your AI Assistant QuranGPT Pro. Ask me about Quranic grammar, Tafsir, Hadith, or verse analysis."
+      content: "Assalamu alaykum. I am your AI Assistant, QuranGPT Pro. Ask me about Quranic grammar, Tafsir, Hadith, or verse analysis."
     }
   ]);
   const [loading, setLoading] = useState(false);
@@ -134,7 +134,7 @@ export default function Home() {
               rows={1}
               onKeyDown={handleKeyDown}
               className="flex-grow px-6 py-4 text-lg bg-transparent outline-none placeholder-gray-500 text-black resize-none"
-              placeholder={messages.length > 1 ? "Enter text here..." : "1:7"}
+              placeholder={messages.length > 1 ? "Enter text here..." : "Enter text here.  Ask about any verse."}
               value={query}
               onChange={(e) => setQuery(e.target.value)}
             />
