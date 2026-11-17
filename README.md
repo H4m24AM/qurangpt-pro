@@ -1,73 +1,22 @@
 # QuranGPT Pro
 
-**QuranGPT Pro** is a scholarly GPT-powered assistant designed to provide detailed Quranic insights, including:
-- Verse analysis
-- Arabic grammar breakdown (I’raab)
-- Tafsir with source citations
-- Related Hadiths with grading
-- Literary and thematic commentary
+A public Quran study app for Quran.Hamza.AM, built with Next.js and TypeScript. Open an ayah by reference, read a surah, or find verses by Arabic text or topic. The verse and named translation come from Quran Foundation. Opening an ayah automatically requests sourced AI study notes with an optional follow-up conversation.
 
----
+## Local setup
 
-## 🔍 Features
+1. Run `npm ci`.
+2. Copy `.env.example` to `.env.local` and configure backend credentials there.
+3. Run `npm run dev` and open `http://localhost:3000`.
+4. Run `npm run check`, `npm test`, and `npm run build` before publishing.
 
-- 📖 Multi-line input for full paragraph queries
-- 📋 Copy-to-clipboard response feature
-- 🎨 Forest green + Quranic gold UI for elegant readability
-- ✉️ Feedback channel via email
-- 📜 Classical Islamic references and formatting
-- 🧠 All outputs end with “And Allah knows best!”
+Create a Quran Foundation Backend/server client. Grant Quran text, translation, tafsir, hadith, and Search API access. Use the corresponding pre-live or production credentials and environment. The pre-live dataset is limited to the first two surahs. Use a funded OpenAI API project whose API key is able to call the configured model.
 
----
+## Desktop and deployment
 
-## 📦 Tech Stack
+Deploy this repository as a Next.js app on Vercel. Configure `OPENAI_API_KEY` and `QF_CLIENT_SECRET` as server secrets, plus the other values from `.env.example`. Set a rate limit on public requests to `/api/qurangpt` and confirm billing and usage monitoring before attaching Quran.Hamza.AM. Keep the Tech.Hamza.AM shortcut pointing at the current demo until the production site passes live lookup, sourced AI analysis, follow-up, citation, and mobile checks. Then point the shortcut and the old tool URL to Quran.Hamza.AM.
 
-- **Framework:** Next.js (v13+ App Router)
-- **Styling:** Tailwind CSS
-- **Deployment:** Vercel
-- **API:** OpenAI GPT-4
+## Endpoint
 
----
-
-## 🚀 Live URL
-
-Visit the deployed site: [your-vercel-url-here.vercel.app](https://your-vercel-url-here.vercel.app)
-
-> Replace the link above with your actual deployment URL.
-
----
-
-## 🔑 Environment Variables
-
-In your `.env.local` file:
-
-```env
-OPENAI_API_KEY=your-openai-api-key
-```
-
----
-
-## 🛠️ Local Development
-
-```bash
-npm install
-npm run dev
-```
-
----
-
-## ✍️ Feedback & Suggestions
-
-This tool is in **beta**. QuranGPT Pro is a study assistant — not a replacement for verified scholarship.
-
-📧 Suggestions? Email [info@p2-cyber.com](mailto:info@p2-cyber.com)
-
----
-
-## 🛡️ Disclaimer
-
-> QuranGPT Pro is an experimental assistant built to support Quranic study. Always verify critical information with trusted scholars. Allah is perfect; AI is not.
-
----
-
-Built with ihsaan by **P² Cyber Solutions**.
+- `GET /api/qurangpt?q=2:255` returns a verse, a paginated surah, or search results.
+- `POST /api/qurangpt` with `{"key":"2:255"}` returns the ayah, source records, and AI study sections. Send `question` and at most four previous question-answer pairs in `history` for a follow-up.
+- If AI analysis fails, the endpoint returns the verse and available records with `study: null` and an explicit error. Source identifiers and hadith grades are taken from the provider, and generated source IDs are checked against retrieved data.
