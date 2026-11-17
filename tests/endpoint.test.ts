@@ -49,7 +49,11 @@ test("runs the ayah and follow-up endpoint through the provider SDK and the Resp
         result: { navigation: [], verses: [{ result_type: "ayah", key: "1:1", name: "Fixture match", arabic: fixtureVerse.text_uthmani }] },
         pagination: { current_page: 1, next_page: null },
       })
-      if (path.endsWith("/verses/by_key/1:1")) return Response.json({ verse: fixtureVerse })
+      if (path.endsWith("/verses/by_key/1:1")) return Response.json({ verse: { ...fixtureVerse, translations: [] } })
+      if (path.endsWith("/quran/translations/131")) {
+        assert.equal(url.searchParams.get("verse_key"), "1:1")
+        return Response.json({ translations: [{ ...fixtureVerse.translations[0], verse_key: "1:1" }] })
+      }
       if (path.includes("/hadith") && path.includes("1:1")) return Response.json({
         hadiths: [{ urn: 410, name: "Sahih al-Bukhari", collection: "bukhari", hadith_number: "1",
           hadith: [{ lang: "en", body: "Fixture hadith text", grades: [{ grade: "Sahih", graded_by: "Fixture grader" }] }] }],

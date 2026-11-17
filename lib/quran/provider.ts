@@ -39,7 +39,7 @@ function verseLink(key: string) {
 }
 
 export function mapVerse(record: ProviderVerse): Verse {
-  const translation = record.translations?.find(item => item.resourceId === translationId)
+  const translation = record.translations?.find(item => Number(item.resourceId) === translationId && item.text)
   const words = (record.words ?? []).filter(item => item.charTypeName === "word").map(word => ({
     arabic: word.textUthmani || word.text || "",
     transliteration: plainText(word.transliteration?.text ?? ""),
@@ -53,7 +53,7 @@ export function mapVerse(record: ProviderVerse): Verse {
     arabic: record.textUthmani,
     translation: plainText(translation.text),
     translator: translation.resourceName || "Dr. Mustafa Khattab, The Clear Quran",
-    transliteration: plainText(record.translations?.find(item => item.resourceId === transliterationId)?.text ?? "")
+    transliteration: plainText(record.translations?.find(item => Number(item.resourceId) === transliterationId)?.text ?? "")
       || words.map(word => word.transliteration).filter(Boolean).join(" "),
     url: verseLink(record.verseKey),
     words,
@@ -84,13 +84,29 @@ function chapters() {
 }
 
 export async function getVerse(key: string) {
-  const record = await provider().content.v4.verses.byKey(key as VerseKey, {
+  const api = provider().content.v4
+  const record = await api.verses.byKey(key as VerseKey, {
     ...verseFields,
     language: "en",
     words: true,
     wordFields: { textUthmani: true },
   })
   if (record.verseKey !== key) throw new AppError(502, "The Quran source returned a different verse.")
+  if (!record.translations?.some(item => Number(item.resourceId) === translationId && item.text)) {
+    const result = await api.raw.translation({
+      path: { translation_id: translationId },
+      query: { verse_key: key, fields: "verse_key,resource_name" },
+    }) as { translations?: (NonNullable<ProviderVerse["translations"]>[number])[] }
+    const translation = result.translations?.find(item => item.verseKey === key && Number(item.resourceId) === translationId)
+    if (translation) record.translations = [...(record.translations ?? []), translation]
+  }
+  if (!record.textUthmani || !record.translations?.some(item => Number(item.resourceId) === translationId && item.text)) {
+    console.warn("Quran provider verse payload is incomplete", {
+      verseKey: key,
+      hasArabic: Boolean(record.textUthmani),
+      translationIds: record.translations?.map(item => item.resourceId) ?? [],
+    })
+  }
   return mapVerse(record)
 }
 
